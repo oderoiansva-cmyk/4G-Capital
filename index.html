@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>SVA · 4G Capital · Executive Intelligence</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0b1727;
+      --card: rgba(15, 29, 48, 0.72);
+      --card-strong: rgba(18, 35, 57, 0.9);
+      --border: rgba(148, 163, 184, 0.13);
+      --text: #f3f7fb;
+      --muted: #94a6ba;
+      --soft: #c4d0dc;
+      --accent: #61d4c3;
+      --accent-soft: rgba(97, 212, 195, 0.10);
+      --accent-border: rgba(97, 212, 195, 0.25);
+      --danger: #ef8f8f;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 78% 12%, rgba(42, 94, 117, 0.16), transparent 28%),
+        radial-gradient(circle at 12% 82%, rgba(26, 79, 94, 0.10), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      min-height: 100vh;
+    }
+
+    .glass {
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+    }
+
+    .glass-strong {
+      background: var(--card-strong);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .muted { color: var(--muted); }
+    .soft { color: var(--soft); }
+    .accent { color: var(--accent); }
+    .divider { border-color: var(--border); }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: reveal 0.65s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .metric-value { letter-spacing: -0.04em; }
+
+    .signal-line {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .signal-line::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.6em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(97, 212, 195, 0.35);
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--accent-border);
+      background: var(--accent-soft);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .cta-button:hover {
+      background: rgba(97, 212, 195, 0.16);
+      border-color: rgba(97, 212, 195, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .access-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(42, 94, 117, 0.18), transparent 35%),
+        rgba(3, 9, 17, 0.97);
+      padding: 24px;
+    }
+
+    .access-box {
+      width: 100%;
+      max-width: 430px;
+      padding: 34px;
+      border-radius: 18px;
+    }
+
+    .access-input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.035);
+      color: white;
+      outline: none;
+    }
+
+    .access-input:focus {
+      border-color: var(--accent-border);
+      box-shadow: 0 0 0 3px rgba(97, 212, 195, 0.05);
+    }
+
+    .access-button {
+      width: 100%;
+      padding: 13px;
+      border-radius: 9px;
+      border: 1px solid var(--accent-border);
+      background: rgba(97, 212, 195, 0.12);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .access-error {
+      color: var(--danger);
+      font-size: 11px;
+      min-height: 16px;
+      margin-top: 8px;
+    }
+
+    .hidden { display: none !important; }
+
+    canvas { max-height: 270px; }
+
+    @media (max-width: 1024px) {
+      .desktop-grid { grid-template-columns: 1fr !important; }
+      .sticky-rail { position: relative !important; top: auto !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================================================
+       ACCESS LAYER
+       ========================================================= -->
+
+  <div id="accessOverlay" class="access-overlay">
+
+    <div class="access-box glass reveal">
+
+      <div class="eyebrow mb-4">
+        Strategic Value Architect
+      </div>
+
+      <h1 class="text-2xl font-semibold tracking-tight mb-3">
+        Executive Intelligence
+      </h1>
+
+      <p class="muted text-sm leading-6 mb-7">
+        This intelligence experience has been prepared specifically
+        for the intended recipient.
+      </p>
+
+      <input
+        id="accessKey"
+        type="password"
+        class="access-input"
+        placeholder="Enter access key"
+        autocomplete="off"
+      />
+
+      <div id="accessError" class="access-error"></div>
+
+      <button
+        id="accessButton"
+        class="access-button mt-2"
+        onclick="unlockExperience()"
+      >
+        Access briefing
+      </button>
+
+      <div class="mt-6 pt-5 border-t divider">
+        <p class="text-[10px] muted leading-5">
+          Confidential · Prepared by SVA
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       EXPERIENCE
+       ========================================================= -->
+
+  <main id="experience" class="hidden">
+
+    <!-- HEADER -->
+    <header class="max-w-[1440px] mx-auto px-6 lg:px-10 pt-8">
+
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+
+        <div>
+          <div class="eyebrow mb-2">
+            SVA · Executive Intelligence Experience
+          </div>
+
+          <div class="text-xs muted" id="metaLine"></div>
+        </div>
+
+        <div class="text-xs muted">
+          Confidential · Account-specific intelligence
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- MAIN GRID -->
+    <section
+      class="max-w-[1440px] mx-auto px-6 lg:px-10 py-10 desktop-grid"
+      style="
+        display:grid;
+        grid-template-columns:minmax(0, 7fr) minmax(280px, 3fr);
+        gap:32px;
+      "
+    >
+
+      <!-- PRIMARY NARRATIVE -->
+      <div>
+
+        <section id="thesisSection" class="reveal"></section>
+
+        <section
+          id="heroMetrics"
+          class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-7 reveal delay-1"
+        ></section>
+
+        <section id="narrative" class="mt-8 space-y-5"></section>
+
+        <section id="briefingSection" class="mt-10 reveal"></section>
+
+      </div>
+
+
+      <!-- RIGHT RAIL -->
+      <aside class="sticky-rail" style="position:sticky;top:24px;height:max-content;">
+
+        <div id="rail" class="space-y-4 reveal delay-2"></div>
+
+      </aside>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="max-w-[1440px] mx-auto px-6 lg:px-10 pb-10 pt-5">
+
+      <div
+        class="pt-6 border-t divider flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+      >
+
+        <div class="text-[10px] muted">
+          Strategic Value Architect · SVA
+        </div>
+
+        <div class="text-[10px] muted">
+          Confidential intelligence · Prepared specifically for this account
+        </div>
+
+      </div>
+
+    </footer>
+
+  </main>
+
+
+  <script>
+
+    /* =========================================================
+       SVA CASE — 4G CAPITAL
+       ========================================================= */
+
+    const SVA_CASE = {
+
+      company: "4G Capital",
+
+      recipient: "Office of the Chief Executive",
+
+      date: "10 November 2026",
+
+      presentationId: "SVA-4GC-01",
+
+      /*
+       * Client-side access key.
+       * Presentation-level gating only. Not server-side security.
+       */
+      accessKey: "DOCDRAG2026",
+
+      briefingUrl: "#",
+
+
+      /* =======================================================
+         THESIS
+         ======================================================= */
+
+      thesis: {
+
+        eyebrow: "Strategic signal · Q4 2026",
+
+        title: "The moat is real. The evidence is not yet built.",
+
+        statement:
+          "4G Capital built the most credit-disciplined book in Kenyan micro-lending by refusing to lend remotely. The industry is now moving in the opposite direction — and the regulatory clock is accelerating the shift.",
+
+        subtext:
+          "SVA's assessment isolates a single tension: the operational complexity that produces the repayment performance is also the complexity that must now be documented, audited and defended before 29 March 2027."
+
+      },
+
+
+      /* =======================================================
+         HERO METRICS
+         ======================================================= */
+
+      heroMetrics: [
+
+        {
+          label: "Revenue · 2025",
+          value: "$49M",
+          note: "Reported annual revenue",
+          tone: "neutral"
+        },
+
+        {
+          label: "EBITDA · 2025",
+          value: "$9.3M",
+          note: "19% margin",
+          tone: "accent"
+        },
+
+        {
+          label: "On-time repayment",
+          value: "92%",
+          note: "vs 95%+ pure-digital benchmark",
+          tone: "neutral"
+        },
+
+        {
+          label: "Licence deadline",
+          value: "29 Mar 2027",
+          note: "CBK Legal Notice No. 191",
+          tone: "neutral"
+        }
+
+      ],
+
+
+      /* =======================================================
+         ADAPTIVE NARRATIVE
+         ======================================================= */
+
+      narrative: [
+
+        {
+          type: "argument",
+
+          eyebrow: "01 · Observation",
+
+          title: "The repayment premium is real. So is the cost of producing it.",
+
+          body:
+            "4G Capital's 92% on-time repayment rate is not a marketing claim. It is an operational fact, sustained across 120,000 loans per month, a $1 billion cumulative loan book, and a customer base that is 73% women and over half rural. The model that produces this number is deliberately inefficient: 1,600 field agents in 226 branches visit shops, assess stock turnover and supplier cycles, and feed human judgment into the EVA decision engine before a single shilling is disbursed. That inefficiency is the moat. It is also the constraint."
+        },
+
+
+        {
+          type: "chart",
+
+          eyebrow: "02 · The gap",
+
+          title: "Three percentage points.",
+
+          description:
+            "4G Capital reports 92% on-time repayment. The pure-digital benchmark reports 95%+. The entire return on 1,600 field agents, 226 branches and mandatory financial-literacy training is a three-point spread — and the spread is narrowing, not widening.",
+
+          chart: {
+
+            type: "bar",
+
+            labels: [
+              "4G Capital (touch-tech)",
+              "Pure-digital benchmark"
+            ],
+
+            datasets: [
+              {
+                label: "On-time repayment (%)",
+                data: [92, 95]
+              }
+            ]
+
+          }
+
+        },
+
+
+        {
+          type: "tension",
+
+          eyebrow: "Strategic tension",
+
+          title:
+            "The market is thinning its local footprint while 4G Capital deepens its own.",
+
+          body:
+            "While 4G Capital expands field infrastructure, the competitive set is re-architecting around embedded credit — lending that runs through partner platforms rather than direct origination. Tala has cut Kenyan staff twice in fourteen months while holding 95%+ repayment, and is shifting explicitly toward device financing, insurance and motorcycle-loan partnerships. Branch, despite profitability, has undertaken parallel reductions. The sector-level signal is not distress. It is capital reallocation away from loan-book growth and toward structures where repayment visibility is built into the commercial relationship rather than inferred from behavioural data."
+        },
+
+
+        {
+          type: "comparison",
+
+          eyebrow: "03 · Relative position",
+
+          title:
+            "The strategic picture changes when the two models are viewed side by side.",
+
+          left: {
+
+            label: "4G Capital — deepening",
+
+            items: [
+              "1,600 field agents · 226 branches",
+              "Human judgment embedded at origination",
+              "Working capital $30–$2,000 per borrower",
+              "Higher evidence burden, higher operational cost",
+              "Moat: assessed lending that pure-digital models cannot replicate"
+            ]
+
+          },
+
+          right: {
+
+            label: "Competitive set — thinning",
+
+            items: [
+              "Two rounds of Kenyan staff reductions at Tala",
+              "Shift toward device, insurance and motorcycle partnerships",
+              "Repayment visibility built into the commercial relationship",
+              "Lower evidence burden, lower operational cost",
+              "Moat: embedded distribution, not field assessment"
+            ]
+
+          }
+
+        },
+
+
+        {
+          type: "signal",
+
+          eyebrow: "SVA signal · Documentation drag",
+
+          items: [
+
+            "The repayment premium is narrowing, not widening. A three-point gap does not justify an order-of-magnitude difference in cost-to-serve — and the regulatory evidentiary standard is about to raise that cost further.",
+
+            "The regulatory architecture rewards documentation, not field presence. The CBK's draft AI Guidance Note treats credit denial and pricing adjustments as critical decisions requiring human review. Field-agent observation is not, by itself, an audit trail.",
+
+            "The Series D narrative depends on a licence that depends on an evidence architecture the company has not yet demonstrated publicly. Institutional capital will not price a field-heavy model on repayment rates alone."
+
+          ]
+
+        },
+
+
+        {
+          type: "timeline",
+
+          eyebrow: "04 · The clock",
+
+          title: "Every week between now and March is both a lending window and a compliance countdown.",
+
+          items: [
+
+            {
+              period: "29 Sep 2026",
+              title: "Legal Notice No. 191 gazetted",
+              body:
+                "The CBK Non-Deposit Taking Credit Providers Regulations, 2026 come into force. Any lender above KSh 20M in capital, borrowings or loan book must be licensed, not merely registered."
+            },
+
+            {
+              period: "10 Nov 2026",
+              title: "Position today",
+              body:
+                "Festive-season demand surge is live. The licensing window has been open six weeks. Roughly twenty weeks remain to the hard stop."
+            },
+
+            {
+              period: "Dec 2026",
+              title: "Evidence architecture must exist",
+              body:
+                "Per-decision explainability mapping, human-oversight logs and model-risk documentation need to be operational — not planned — before the application can be credible."
+            },
+
+            {
+              period: "Feb 2027",
+              title: "Application filing window closes in practice",
+              body:
+                "Filing in February leaves one month of buffer against a March deadline. Filing later compresses the Series D diligence timeline beneath the regulatory one."
+            },
+
+            {
+              period: "29 Mar 2027",
+              title: "Hard stop",
+              body:
+                "Six months from gazettement. The licence is not a compliance exercise. It is the precondition for the Series D conversation."
+            }
+
+          ]
+
+        },
+
+
+        {
+          type: "evidence",
+
+          eyebrow: "05 · Evidence base",
+
+          title: "The three facts that make this diagnosis difficult to dismiss.",
+
+          body:
+            "One: a three-point repayment gap does not, on its own, justify a field network of 1,600 agents and 226 branches — the operational cost sits outside the metric that is used to justify it. Two: the CBK's per-decision explainability requirement applies to automated scoring, and 4G Capital's human-in-the-loop model is architecturally closer to compliance than pure-digital scoring — but only if the human judgment is documented to the regulator's standard. Three: the $1 billion cumulative loan book and the Series D both rest on a licence that rests on an evidence architecture that is not yet in the public domain.",
+
+          source:
+            "CBK Legal Notice No. 191 (29 Sep 2026); CBK draft AI Guidance Note; 4G Capital published disclosures; Tala and Branch public statements on Kenya operations."
+
+        },
+
+
+        {
+          type: "question",
+
+          eyebrow: "Executive question",
+
+          title:
+            "Is the cost of proving the model works rising faster than the revenue premium the model generates?",
+
+          body:
+            "This is the unresolved issue SVA believes deserves deeper examination. The answer is not visible in the repayment rate, the loan book, or the EBITDA margin. It sits in the documentation layer — and that layer does not yet exist at the standard the regulator will apply."
+
+        }
+
+      ],
+
+
+      /* =======================================================
+         RIGHT RAIL
+         ======================================================= */
+
+      rail: {
+
+        value: {
+
+          label: "Core signal",
+
+          value: "Documentation drag",
+
+          note:
+            "The moat is real. The evidence is not yet built."
+
+        },
+
+        decision: {
+
+          label: "Decision lens",
+
+          value: "Evidence readiness",
+
+          note:
+            "Separate the model's performance from the model's provability."
+
+        },
+
+        metric: {
+
+          label: "Key metric",
+
+          value: "92%",
+
+          note:
+            "On-time repayment — against a 95%+ pure-digital benchmark and a six-month licensing clock."
+
+        },
+
+        miniChart: {
+
+          enabled: false,
+
+          labels: ["2023", "2024", "2025"],
+
+          data: [0, 0, 0]
+
+        }
+
+      },
+
+
+      /* =======================================================
+         UNRESOLVED QUESTION
+         ======================================================= */
+
+      unresolvedQuestion: {
+
+        eyebrow: "What remains unresolved",
+
+        title:
+          "The strongest signal is visible. The mechanism behind it requires deeper examination.",
+
+        body:
+          "The Strategic Briefing expands the evidence base, the EVA explainability architecture assessment, the embedded-finance exposure analysis and the Series D evidence-readiness roadmap."
+
+      },
+
+
+      /* =======================================================
+         BRIEFING / CTA
+         ======================================================= */
+
+      briefing: {
+
+        eyebrow: "Strategic Briefing",
+
+        title:
+          "The full SVA assessment goes further.",
+
+        body:
+          "The private Strategic Briefing expands the account-specific evidence, the strategic diagnosis and the implications behind the signals identified above — including the root-cause mapping of documentation drag, the competitor embedded-finance exposure analysis, and the evidence-readiness roadmap required before 29 March 2027.",
+
+        ctaLabel:
+          "View your Strategic Briefing",
+
+        ctaUrl:
+          "#",
+
+        conversationLabel:
+          "Request a 20-minute conversation",
+
+        conversationEmail:
+          "oderoian.sva@gmail.com"
+
+      }
+
+    };
+
+
+    /* =========================================================
+       UTILITY
+       ========================================================= */
+
+    function escapeHTML(value) {
+
+      if (value === undefined || value === null) {
+        return "";
+      }
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =========================================================
+       THESIS
+       ========================================================= */
+
+    function renderThesis() {
+
+      const t = SVA_CASE.thesis;
+
+      document.getElementById("thesisSection").innerHTML = `
+
+        <div class="max-w-4xl">
+
+          <div class="eyebrow mb-4">
+            ${escapeHTML(t.eyebrow)}
+          </div>
+
+          <h1
+            class="text-4xl md:text-5xl lg:text-[58px]
+                   leading-[1.02] tracking-[-0.045em]
+                   font-semibold"
+          >
+            ${escapeHTML(t.title)}
+          </h1>
+
+          <p
+            class="mt-6 text-lg md:text-xl
+                   leading-8 soft max-w-3xl"
+          >
+            ${escapeHTML(t.statement)}
+          </p>
+
+          <p
+            class="mt-4 text-sm leading-7 muted max-w-2xl"
+          >
+            ${escapeHTML(t.subtext)}
+          </p>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       HERO METRICS
+       ========================================================= */
+
+    function renderHeroMetrics() {
+
+      const container = document.getElementById("heroMetrics");
+
+      container.innerHTML = "";
+
+      SVA_CASE.heroMetrics.forEach(metric => {
+
+        const tone =
+          metric.tone === "accent"
+            ? "accent"
+            : "text-white";
+
+        container.innerHTML += `
+
+          <div class="glass rounded-xl p-5">
+
+            <div class="text-[10px] uppercase tracking-[0.14em] muted">
+              ${escapeHTML(metric.label)}
+            </div>
+
+            <div
+              class="metric-value text-2xl md:text-3xl
+                     font-semibold mt-3 ${tone}"
+            >
+              ${escapeHTML(metric.value)}
+            </div>
+
+            <div class="text-[11px] muted mt-2">
+              ${escapeHTML(metric.note)}
+            </div>
+
+          </div>
+
+        `;
+
+      });
+
+    }
+
+
+    /* =========================================================
+       NARRATIVE BLOCK ROUTER
+       ========================================================= */
+
+    function renderBlock(block, index) {
+
+      switch (block.type) {
+
+        case "argument":    return renderArgument(block, index);
+        case "tension":     return renderTension(block, index);
+        case "signal":      return renderSignal(block, index);
+        case "chart":       return renderChartBlock(block, index);
+        case "metric":      return renderMetricBlock(block, index);
+        case "comparison":  return renderComparison(block, index);
+        case "timeline":    return renderTimeline(block, index);
+        case "opportunity": return renderOpportunity(block, index);
+        case "question":    return renderQuestion(block, index);
+        case "evidence":    return renderEvidence(block, index);
+
+        default: return "";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       ARGUMENT
+       ========================================================= */
+
+    function renderArgument(block, index) {
+
+      return `
+
+        <article class="glass rounded-2xl p-7 md:p-8 reveal">
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(block.eyebrow || `Observation ${index + 1}`)}
+          </div>
+
+          <h2 class="text-xl md:text-2xl font-semibold tracking-tight">
+            ${escapeHTML(block.title)}
+          </h2>
+
+          <p class="mt-4 text-sm md:text-[15px] leading-7 soft max-w-3xl">
+            ${escapeHTML(block.body)}
+          </p>
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       TENSION
+       ========================================================= */
+
+    function renderTension(block) {
+
+      return `
+
+        <article
+          class="rounded-2xl p-7 md:p-8"
+          style="
+            background:rgba(97,212,195,0.045);
+            border:1px solid rgba(97,212,195,0.16);
+          "
+        >
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(block.eyebrow || "Strategic tension")}
+          </div>
+
+          <h2 class="text-xl md:text-2xl font-semibold tracking-tight">
+            ${escapeHTML(block.title)}
+          </h2>
+
+          <p class="mt-4 text-sm md:text-[15px] leading-7 soft max-w-3xl">
+            ${escapeHTML(block.body)}
+          </p>
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       SIGNAL
+       ========================================================= */
+
+    function renderSignal(block) {
+
+      return `
+
+        <article class="glass rounded-2xl p-7 md:p-8">
+
+          <div class="eyebrow mb-5">
+            ${escapeHTML(block.eyebrow || "Signal")}
+          </div>
+
+          <div class="space-y-5">
+
+            ${(block.items || []).map(item => `
+
+              <div class="signal-line">
+
+                <p class="text-sm md:text-[15px] leading-7 soft">
+                  ${escapeHTML(item)}
+                </p>
+
+              </div>
+
+            `).join("")}
+
+          </div>
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       CHART
+       ========================================================= */
+
+    function renderChartBlock(block, index) {
+
+      const canvasId = `chart-${index}`;
+
+      setTimeout(() => {
+
+        const canvas = document.getElementById(canvasId);
+
+        if (!canvas) return;
+
+        new Chart(canvas, {
+
+          type: block.chart.type || "line",
+
+          data: {
+
+            labels: block.chart.labels,
+
+            datasets: block.chart.datasets.map((dataset, datasetIndex) => ({
+
+              label: dataset.label,
+
+              data: dataset.data,
+
+              borderColor:
+                datasetIndex === 0
+                  ? "#61d4c3"
+                  : "rgba(148,163,184,0.55)",
+
+              backgroundColor:
+                datasetIndex === 0
+                  ? "rgba(97,212,195,0.20)"
+                  : "rgba(148,163,184,0.06)",
+
+              borderWidth: 2,
+
+              pointRadius: 3,
+
+              pointHoverRadius: 5,
+
+              tension: 0.35,
+
+              fill: block.chart.type === "bar" ? true : datasetIndex === 0
+
+            }))
+
+          },
+
+          options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+              legend: {
+
+                labels: {
+
+                  color: "#94a6ba",
+
+                  font: { family: "Inter", size: 10 }
+
+                }
+
+              }
+
+            },
+
+            scales: {
+
+              x: {
+
+                ticks: { color: "#708298" },
+
+                grid: { color: "rgba(148,163,184,0.06)" }
+
+              },
+
+              y: {
+
+                beginAtZero: false,
+
+                min: 85,
+
+                max: 100,
+
+                ticks: { color: "#708298" },
+
+                grid: { color: "rgba(148,163,184,0.06)" }
+
+              }
+
+            }
+
+          }
+
+        });
+
+      }, 50);
+
+      return `
+
+        <article class="glass rounded-2xl p-7 md:p-8">
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(block.eyebrow || "Performance")}
+          </div>
+
+          <h2 class="text-xl md:text-2xl font-semibold tracking-tight">
+            ${escapeHTML(block.title)}
+          </h2>
+
+          <p class="text-sm muted leading-6 mt-3 max-w-2xl">
+            ${escapeHTML(block.description || "")}
+          </p>
+
+          <div class="mt-7 h-[270px]">
+            <canvas id="${canvasId}"></canvas>
+          </div>
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       METRIC
+       ========================================================= */
+
+    function renderMetricBlock(block) {
+
+      return `
+
+        <article class="glass rounded-2xl p-7">
+
+          <div class="eyebrow mb-4">
+            ${escapeHTML(block.eyebrow || "Metric")}
+          </div>
+
+          <div class="text-4xl font-semibold tracking-tight">
+            ${escapeHTML(block.value)}
+          </div>
+
+          <h2 class="text-lg font-semibold mt-4">
+            ${escapeHTML(block.title)}
+          </h2>
+
+          <p class="text-sm muted leading-7 mt-3 max-w-2xl">
+            ${escapeHTML(block.body)}
+          </p>
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       COMPARISON
+       ========================================================= */
+
+    function renderComparison(block) {
+
+      return `
+
+        <article class="glass rounded-2xl p-7 md:p-8">
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(block.eyebrow || "Comparison")}
+          </div>
+
+          <h2 class="text-xl md:text-2xl font-semibold tracking-tight">
+            ${escapeHTML(block.title)}
+          </h2>
+
+          <div class="grid md:grid-cols-2 gap-4 mt-7">
+
+            <div
+              class="rounded-xl p-5"
+              style="
+                background:rgba(255,255,255,0.025);
+                border:1px solid var(--border);
+              "
+            >
+
+              <div class="text-xs font-semibold mb-4">
+                ${escapeHTML(block.left.label)}
+              </div>
+
+              <div class="space-y-3">
+
+                ${block.left.items.map(item => `
+
+                  <div class="text-sm muted leading-6">
+                    ${escapeHTML(item)}
+                  </div>
+
+                `).join("")}
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="rounded-xl p-5"
+              style="
+                background:rgba(255,255,255,0.025);
+                border:1px solid var(--border);
+              "
+            >
+
+              <div class="text-xs font-semibold mb-4">
+                ${escapeHTML(block.right.label)}
+              </div>
+
+              <div class="space-y-3">
+
+                ${block.right.items.map(item => `
+
+                  <div class="text-sm muted leading-6">
+                    ${escapeHTML(item)}
+                  </div>
+
+                `).join("")}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       TIMELINE
+       ========================================================= */
+
+    function renderTimeline(block) {
+
+      return `
+
+        <article class="glass rounded-2xl p-7 md:p-8">
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(block.eyebrow || "Timeline")}
+          </div>
+
+          <h2 class="text-xl md:text-2xl font-semibold tracking-tight">
+            ${escapeHTML(block.title)}
+          </h2>
+
+          <div class="mt-7 space-y-5">
+
+            ${(block.items || []).map(item => `
+
+              <div class="flex gap-5">
+
+                <div
+                  class="w-[92px] shrink-0
+                         text-xs font-semibold accent"
+                >
+                  ${escapeHTML(item.period)}
+                </div>
+
+                <div>
+
+                  <div class="text-sm font-semibold">
+                    ${escapeHTML(item.title)}
+                  </div>
+
+                  <p class="text-sm muted leading-6 mt-1">
+                    ${escapeHTML(item.body)}
+                  </p>
+
+                </div>
+
+              </div>
+
+            `).join("")}
+
+          </div>
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       OPPORTUNITY
+       ========================================================= */
+
+    function renderOpportunity(block) {
+
+      return `
+
+        <article
+          class="rounded-2xl p-7 md:p-8"
+          style="
+            background:linear-gradient(
+              135deg,
+              rgba(97,212,195,0.09),
+              rgba(15,29,48,0.65)
+            );
+            border:1px solid rgba(97,212,195,0.15);
+          "
+        >
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(block.eyebrow || "Strategic opportunity")}
+          </div>
+
+          <h2 class="text-xl md:text-2xl font-semibold tracking-tight">
+            ${escapeHTML(block.title)}
+          </h2>
+
+          <p class="mt-4 text-sm md:text-[15px] leading-7 soft max-w-3xl">
+            ${escapeHTML(block.body)}
+          </p>
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       QUESTION
+       ========================================================= */
+
+    function renderQuestion(block) {
+
+      return `
+
+        <article class="glass-strong rounded-2xl p-7 md:p-8">
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(block.eyebrow || "Executive question")}
+          </div>
+
+          <h2
+            class="text-xl md:text-2xl
+                   font-semibold tracking-tight
+                   leading-8"
+          >
+            ${escapeHTML(block.title)}
+          </h2>
+
+          <p class="mt-4 text-sm leading-7 muted max-w-3xl">
+            ${escapeHTML(block.body)}
+          </p>
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       EVIDENCE
+       ========================================================= */
+
+    function renderEvidence(block) {
+
+      return `
+
+        <article class="glass rounded-2xl p-7">
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(block.eyebrow || "Evidence")}
+          </div>
+
+          <h2 class="text-xl font-semibold">
+            ${escapeHTML(block.title)}
+          </h2>
+
+          <p class="text-sm muted leading-7 mt-4">
+            ${escapeHTML(block.body)}
+          </p>
+
+          ${
+            block.source
+              ? `
+                <div class="mt-5 pt-4 border-t divider">
+                  <div class="text-[10px] uppercase tracking-[0.12em] muted">
+                    Source
+                  </div>
+
+                  <div class="text-xs soft mt-2">
+                    ${escapeHTML(block.source)}
+                  </div>
+                </div>
+              `
+              : ""
+          }
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       RIGHT RAIL
+       ========================================================= */
+
+    function renderRail() {
+
+      const r = SVA_CASE.rail;
+
+      document.getElementById("rail").innerHTML = `
+
+        <!-- CORE VALUE -->
+
+        <div class="glass rounded-2xl p-6">
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(r.value.label)}
+          </div>
+
+          <div class="text-xl font-semibold tracking-tight">
+            ${escapeHTML(r.value.value)}
+          </div>
+
+          <p class="text-xs muted leading-6 mt-3">
+            ${escapeHTML(r.value.note)}
+          </p>
+
+        </div>
+
+
+        <!-- DECISION LENS -->
+
+        <div class="glass rounded-2xl p-6">
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(r.decision.label)}
+          </div>
+
+          <div class="text-lg font-semibold">
+            ${escapeHTML(r.decision.value)}
+          </div>
+
+          <p class="text-xs muted leading-6 mt-3">
+            ${escapeHTML(r.decision.note)}
+          </p>
+
+        </div>
+
+
+        <!-- METRIC -->
+
+        <div class="glass rounded-2xl p-6">
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(r.metric.label)}
+          </div>
+
+          <div class="text-3xl font-semibold metric-value accent">
+            ${escapeHTML(r.metric.value)}
+          </div>
+
+          <p class="text-xs muted leading-6 mt-3">
+            ${escapeHTML(r.metric.note)}
+          </p>
+
+        </div>
+
+
+        ${
+          r.miniChart && r.miniChart.enabled
+            ? `
+              <div class="glass rounded-2xl p-6">
+
+                <div class="eyebrow mb-4">
+                  Trajectory
+                </div>
+
+                <div class="h-[150px]">
+                  <canvas id="miniChart"></canvas>
+                </div>
+
+              </div>
+            `
+            : ""
+        }
+
+
+        <!-- UNRESOLVED QUESTION -->
+
+        <div
+          class="rounded-2xl p-6"
+          style="
+            background:rgba(97,212,195,0.045);
+            border:1px solid rgba(97,212,195,0.14);
+          "
+        >
+
+          <div class="eyebrow mb-3">
+            ${escapeHTML(SVA_CASE.unresolvedQuestion.eyebrow)}
+          </div>
+
+          <div class="text-sm font-semibold leading-6">
+            ${escapeHTML(SVA_CASE.unresolvedQuestion.title)}
+          </div>
+
+          <p class="text-xs muted leading-6 mt-3">
+            ${escapeHTML(SVA_CASE.unresolvedQuestion.body)}
+          </p>
+
+        </div>
+
+      `;
+
+
+      if (r.miniChart && r.miniChart.enabled) {
+
+        const ctx = document
+          .getElementById("miniChart")
+          .getContext("2d");
+
+        new Chart(ctx, {
+
+          type: "line",
+
+          data: {
+
+            labels: r.miniChart.labels,
+
+            datasets: [{
+
+              data: r.miniChart.data,
+
+              borderColor: "#61d4c3",
+
+              backgroundColor: "rgba(97,212,195,0.07)",
+
+              borderWidth: 2,
+
+              pointRadius: 2,
+
+              tension: 0.4,
+
+              fill: true
+
+            }]
+
+          },
+
+          options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: { legend: { display: false } },
+
+            scales: {
+              x: { display: false },
+              y: { display: false }
+            }
+
+          }
+
+        });
+
+      }
+
+    }
+
+
+    /* =========================================================
+       BRIEFING / CTA
+       ========================================================= */
+
+    function renderBriefing() {
+
+      const b = SVA_CASE.briefing;
+
+      document.getElementById("briefingSection").innerHTML = `
+
+        <div
+          class="rounded-2xl p-8 md:p-10"
+          style="
+            background:
+              linear-gradient(
+                135deg,
+                rgba(20,42,61,0.92),
+                rgba(8,18,31,0.95)
+              );
+            border:1px solid rgba(97,212,195,0.15);
+          "
+        >
+
+          <div class="eyebrow mb-4">
+            ${escapeHTML(b.eyebrow)}
+          </div>
+
+          <h2
+            class="text-2xl md:text-3xl
+                   font-semibold tracking-tight"
+          >
+            ${escapeHTML(b.title)}
+          </h2>
+
+          <p
+            class="mt-4 text-sm md:text-[15px]
+                   leading-7 soft max-w-3xl"
+          >
+            ${escapeHTML(b.body)}
+          </p>
+
+
+          <!-- PRIMARY BRIEFING CTA -->
+
+          <div class="mt-7">
+
+            <a
+              href="${escapeHTML(b.ctaUrl)}"
+              class="cta-button"
+            >
+
+              ${escapeHTML(b.ctaLabel)}
+
+              <span aria-hidden="true">
+                →
+              </span>
+
+            </a>
+
+          </div>
+
+
+          <!-- CONVERSATION CTA -->
+
+          <div class="mt-8 pt-7 border-t divider">
+
+            <div class="text-xs muted mb-3">
+              Prefer to discuss the assessment directly?
+            </div>
+
+            <a
+              href="mailto:${escapeHTML(b.conversationEmail)}?subject=SVA%20%E2%80%94%204G%20Capital%20%C2%B7%2020-minute%20conversation"
+              class="cta-button"
+            >
+
+              ${escapeHTML(b.conversationLabel)}
+
+              <span aria-hidden="true">
+                →
+              </span>
+
+            </a>
+
+            <div class="mt-3 text-xs muted">
+              ${escapeHTML(b.conversationEmail)}
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       META
+       ========================================================= */
+
+    function renderMeta() {
+
+      document.getElementById("metaLine").innerHTML = `
+
+        ${escapeHTML(SVA_CASE.company)}
+        <span class="mx-2 opacity-40">·</span>
+        ${escapeHTML(SVA_CASE.recipient)}
+        <span class="mx-2 opacity-40">·</span>
+        ${escapeHTML(SVA_CASE.date)}
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       INITIALIZE
+       ========================================================= */
+
+    function initializeExperience() {
+
+      renderMeta();
+
+      renderThesis();
+
+      renderHeroMetrics();
+
+      const narrative = document.getElementById("narrative");
+
+      narrative.innerHTML = "";
+
+      SVA_CASE.narrative.forEach((block, index) => {
+
+        narrative.innerHTML += renderBlock(block, index);
+
+      });
+
+      renderRail();
+
+      renderBriefing();
+
+    }
+
+
+    /* =========================================================
+       ACCESS
+       ========================================================= */
+
+    function unlockExperience() {
+
+      const entered = document.getElementById("accessKey").value;
+
+      const error = document.getElementById("accessError");
+
+      if (entered === SVA_CASE.accessKey) {
+
+        document.getElementById("accessOverlay").classList.add("hidden");
+
+        document.getElementById("experience").classList.remove("hidden");
+
+        initializeExperience();
+
+      } else {
+
+        error.textContent = "Access key not recognised.";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       ENTER KEY SUPPORT
+       ========================================================= */
+
+    document
+      .getElementById("accessKey")
+      .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+          unlockExperience();
+        }
+
+      });
+
+  </script>
+
+</body>
+</html>
